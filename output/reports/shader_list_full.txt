@@ -1,0 +1,955 @@
+<effect>/Additive
+<effect>/AdditiveBackface
+<effect>/AdditiveDissolution
+<effect>/AdditiveDisturbance
+<effect>/AdditiveNoVertexColor
+<effect>/AdditiveNoVertexColor2
+<effect>/AdditiveUV
+<effect>/AdditiveUVSequence
+<effect>/AddiviveOnce
+<effect>/AddtiveBillboard
+<effect>/Blended
+<effect>/Blended_NotAlpha
+<effect>/Blended_Reflection
+<effect>/BlendedBackface
+<effect>/BlendedBillboard
+<effect>/BlendedBillboardScale
+<effect>/BlendedDissolution
+<effect>/BlendedDissolutionUV
+<effect>/BlendedDisturbance
+<effect>/BlendedOnce
+<effect>/BlendedUV
+<effect>/CharacterFakeShadow
+<effect>/fresnel
+<effect>/fresnel_InBattle
+<effect>/MeshDissolution
+<effect>/Warp
+<effect>_Display_ML/MeshDissolution_ML
+<effect>_ML/Additive_ML
+<effect>_ML/AdditiveBackface_ML
+<effect>_ML/AdditiveDissolution_ML
+<effect>_ML/AdditiveDisturbance_ML
+<effect>_ML/AdditiveDisturbanceUnite_ML
+<effect>_ML/AdditiveUnite_ML
+<effect>_ML/AdditiveUV_ML
+<effect>_ML/AdditiveUV_ZTestAlways_ML
+<effect>_ML/AdditiveUVUnite_ML
+<effect>_ML/AddiviveOnce_ML
+<effect>_ML/AtlasAnimationAdditiveShader_ML
+<effect>_ML/AtlasAnimationAlphaBlendShader_ML
+<effect>_ML/Blended_ML
+<effect>_ML/Blended_ML2
+<effect>_ML/BlendedBackface_ML
+<effect>_ML/BlendedBackface_ML2
+<effect>_ML/BlendedDissolution_ML
+<effect>_ML/BlendedDissolutionUV_ML
+<effect>_ML/BlendedDisturbance_ML
+<effect>_ML/BlendedDisturbance_ML_NotAlpha
+<effect>_ML/BlendedDisturbanceUnite_ML
+<effect>_ML/BlendedOnce_ML
+<effect>_ML/BlendedUnite_ML
+<effect>_ML/BlendedUV2Layers_ML
+<effect>_ML/BlendedUV_ML
+<effect>_ML/BlendedUV_ML_NotAlpha
+<effect>_ML/BlendedUV_ZTestAlways_ML
+<effect>_ML/BlendedUVOnce_ML
+<effect>_ML/BlendedUVUnite_ML
+<effect>_ML/Fresnel_ML
+<effect>_ML/FresnelDissolveVerAnim_ML
+<effect>_ML/Fx_Amplify_UV
+<effect>_ML/Fx_Diffuse_LG
+<effect>_ML/FX_M_119_xinghe
+<effect>_ML/Fx_UnlitDoubleFace
+<effect>_ML/FX_UvMask_ML
+<effect>_ML/Fx_Wind_Cut_Back
+<effect>_ML/HairEffect
+<effect>_ML/LiuGuang_ML
+<effect>_ML/MarkBuffer
+<effect>_ML/Mesh_Diffuse_Lg
+<effect>_ML/Mesh_Diffuse_Lg_InBattle
+<effect>_ML/MobileAlphaAddZTestOff_ML
+<effect>_ML/Stencil/AdditiveUV_ML_Stencil
+<effect>_ML/UI_RD_ML
+<effect>_ML/UiClipParticleAdditiveUV_ML
+<effect>_ML/UnliteTextureBothSide_ML
+<effect>_ML/UnlitUV_ML
+<effect>_ML/UnlitUVAlpha_ML
+<effect>_ML_uv/Fx_Pa_Add_ND
+<effect>_ML_uv/Fx_Pa_Blend_ND
+<effect>_ML_uv/LaserBladed
+<effect>_ML_uv/LaserBladedLod
+<effect>_ML_uv/ParticleFx_Circle
+<effect>_ML_uv/ParticleFx_CrossShining
+<effect>_ML_uv/ParticleFx_Diffuse2_S3_Common
+<effect>_ML_uv/ParticleFx_HardDissolve
+<effect>_ML_uv/ParticleFx_Pa_Add_ND
+<effect>_ML_uv/ParticleFx_Pa_Add_ND_Fix
+<effect>_ML_uv/ParticleFx_Pa_Add_ND_UV2
+<effect>_ML_uv/ParticleFx_Pa_Blend_ND
+<effect>_ML_uv/ParticleFx_Pa_Blend_ND_Fix
+<effect>_ML_uv/ParticleFx_Pa_Blend_ND_UV2
+<effect>_ML_uv/ParticleFx_Pa_VcMove
+<effect>_ML_uv/ParticleFx_RGB_Offset
+<effect>_ML_uv/Stencil/ParticleFx_Pa_Blend_ND_Stencil
+<effect>_ML_uv/UV_FlowMap
+<VFX>_CN/S4_DissolveFresnel
+<VFX>_EN/S2_DouyinEffect
+<VFX>_EN/S2_DouyinEffect_UI
+<VFX>_EN/S2_FlowlightEffect
+<VFX>_EN/S3_DouyinEffect
+BattleFeatures/FogOfWar/Internal
+BattleFeatures/Weather/GodRay
+BattleShaders/BattleEffect/BattleEffect_Fresnel_OutlineV2
+BattleShaders/BattleEffect/BattleEffect_Glitch
+BattleShaders/BattleEffect/BattleEffect_IceCrystalJade
+BattleShaders/BattleEffect/BattleEffect_LiquidSand
+BattleShaders/BattleEffect/BattleEffect_NormalDissolveDistortion
+BattleShaders/BattleEffect/BattleEffect_Particle
+BattleShaders/BattleEffect/BattleEffect_Particle_AlphaClip
+BattleShaders/BattleEffect/BattleEffect_Pattern
+BattleShaders/BattleEffect/BattleEffect_SDFDissolve
+BattleShaders/BattleEffect/BattleEffect_SmoothFlipbook
+BattleShaders/BattleEffect/BattleEffect_Standard
+BattleShaders/BattleEffect/BattleEffect_Standard(Outline)
+BattleShaders/BattleEffect/BattleEffect_Standard(Outline_PreDepth)
+BattleShaders/BattleEffect/BattleEffect_Standard(PreDepth)
+BattleShaders/BattleEffect/BattleEffect_Trail
+BattleShaders/BattleEffect/BattleEffect_WaterWall
+BattleShaders/BattleEffect/GPUParticles_Lit
+BattleShaders/BattleEffect/GPUParticles_Unlit
+BattleShaders/BattleHero/BattleHero(4.0)_Arlott
+BattleShaders/BattleHero/BattleHero(4.0)_Effect_FadeTrans
+BattleShaders/BattleHero/BattleHero(4.0)_Effect_VertexMove
+BattleShaders/BattleHero/BattleHero(4.0)_InBattle_Low
+BattleShaders/BattleHero/BattleHero(4.0)_InBattle_Low_Dissolve
+BattleShaders/BattleHero/BattleHero(4.0)_InBattle_monsterLow
+BattleShaders/BattleHero/BattleHero(4.0)_Monster
+BattleShaders/BattleHero/BattleHero(4.0)_Standard
+BattleShaders/BattleHero/BattleHero(4.0)_Standard_Anisotropic
+BattleShaders/BattleHero/BattleHero(4.0)_Standard_Flow
+BattleShaders/BattleHero/BattleHero(4.0)_Standard_FluLaser
+BattleShaders/BattleHero/BattleHero(4.0)_Unlit
+BattleShaders/BattleHero/BattleHero(4.0)_VertAnim
+BattleShaders/BattleScene/BattleScene_Crystal
+BattleShaders/BattleScene/BattleScene_DynamicObject
+BattleShaders/BattleScene/BattleScene_DynamicObject_NoShadow
+BattleShaders/BattleScene/BattleScene_GrassBlend
+BattleShaders/BattleScene/BattleScene_Reflection
+BattleShaders/BattleScene/BattleScene_River
+BattleShaders/BattleScene/BattleScene_SimpleWater_Mask
+BattleShaders/BattleScene/BattleScene_Standard
+BattleShaders/BattleUI/BattleUI_HoleWithGradient
+BattleShaders/BattleUI/BattleUI_ScanLine(Bidirectional)
+billCai/BlackWhiteComicFlash
+Card/CrystallFill
+Card/Stencil/UiClipCard234_Stencil
+Card/UiClip001XMas
+Card/UiClip001XMas 1
+Card/UiClip163Zhao
+Card/UiClip163Zhao 1
+Card/UiClipCard016
+Card/UiClipCard034
+Card/UiClipCard043
+Card/UiClipCard074
+Card/UiClipCard143
+Card/UiClipCard154
+Card/UiClipCard234
+Card/UiClipCard235
+Card/UiClipCard263
+Card/UiClipCard282
+Card/UiClipCard343
+Card/UiClipCard433
+Card/UIClipCard_VX
+Card/WaterFill
+Custom/AtlasAnimationAdditiveShader
+Custom/AtlasAnimationAlphaBlendShader
+Custom/BallFade
+Custom/DepthCreate
+Custom/HexObj
+Custom/MobileBloom
+Custom/RangeCircle
+Custom/ShadowMap
+Custom/TexBlend
+Custom/TexBlendStar
+Custom/UITexBlend
+Dragon/Distort/distort Alpha Blend
+Dragon/Distort/distortadd
+Effect/BillboardAni
+Effect/BillboardAniAB
+Effect/Diff_VertexGradient
+Effect/DispCloud
+Effect/DissolveFresnelFlow_Unlit
+Effect/EffectCartoon
+Effect/EffectMonster
+Effect/EffectXuZuo
+Effect/FakeParticle_Dissolve
+Effect/FluidVertexAnim
+Effect/Fresnel_HeightGradient
+Effect/Fresnel_LG_BlockGlitch
+Effect/Fresnel_LG_Emi_Show
+Effect/FX_BodyStars_InBattle
+Effect/FX_Distortion_Show
+Effect/FX_Fresnel_Flu_Blend_Common
+Effect/FX_Fresnel_Flu_EffMapOn_InBattle
+Effect/FX_Fresnel_Flu_InBattle
+Effect/FX_Fresnel_Flu_Show
+Effect/FX_Fresnel_Flu_V2_Common
+Effect/FX_NoiseFlu
+Effect/FX_Scroll
+Effect/Fx_Shicha
+Effect/FX_VertexMotion_Fresnel
+Effect/Glass
+Effect/GlassWithTex
+Effect/GlassWithTex_High
+Effect/GroundOpacityClip
+Effect/MaskShowAdd
+Effect/MaskShowAlphaBlend
+Effect/MatcapEmissionDistortion
+Effect/ModelScaleAdd
+Effect/ModelScaleAlphaBlend
+Effect/MoveLight
+Effect/ParticleFx_Pa_Blend_ND_Common
+Effect/ParticleFx_Pa_Blend_ND_Common2
+Effect/ParticleFx_Pa_Blend_ND_Common_Pixel
+Effect/ParticleFx_Pa_Blend_ND_CommonDouble
+Effect/ParticleFx_Pa_Blend_ND_InBattle
+Effect/ParticleFx_Pa_Blend_ND_InBattle2_AutoTiling
+Effect/ParticleFx_Pa_Blend_ND_InBattle2_AutoTilingFix
+Effect/ParticleFx_Pa_Blend_ND_InBattle_CameAlpha
+Effect/ParticlesDisturbance
+Effect/ScreenInterference
+Effect/SizeFixPlane
+Effect/SizeFixPlaneMult
+Effect/SizeFixPlaneTrans
+Effect/StarrySky_Show
+Effect/StarrySky_Show_New
+Effect/Tail_Alpha
+Effect/TrailFx_ND_CommonNoise
+Effect/UvWater
+Effect/UvWaterInfoBg
+Effect/VertexMotion_Show
+Effect/VertScaleAB
+Effect/VertScaleAdd
+Effect_FX/Fx_Diffuse_S_LG
+Effect_FX/Fx_Yemian_D
+Effect_FX/Fx_Yemian_D_NoFacing
+Effect_Obsolete/PuBu1
+Effect_Obsolete/PuBu2
+Effect_Obsolete/PuBu3
+Effect_VX/VX_Common_Dissolve
+Effect_VX/VX_Common_Simple
+Effect_VX/VX_Dissolve_2U_Shape
+Effect_VX/VX_SpaceDistort
+Effect_VX/VX_StarrySky
+EffectCN/EffCNLV1
+EffectCN/EffCNLV1Fog
+EffectCN/EffCNLV2
+EffectCN/EffCNLV3_Deep
+EffectCN/EffCNLV4_Deep
+EffectCN/MeshDance
+EffectCN/SkyBoxFog
+EffectCN/StencilMask
+Efx/Disappear
+Efx/FrameMat
+Efx/UVAnimAddParticle
+Esfog/Dissolve
+Esfog/OutLine/Depth
+Esfog/OutLine/Mix
+Esfog/OutLine/Occlusion
+Esfog/OutLine/Stretch
+Forge3D/Force Field Additive
+Forge3D/Force Field Mobile
+Fur/Lit/Basic 8Layer
+Fur/Unlit/Ramp 8Layer
+Fur/Unlit/Ramp Complex 8Layer
+Fx_mesh/Color_LG_2UReplace
+Fx_mesh/Diffuse_Zbuff_A
+Fx_mesh/Element_NL
+Fx_mesh/Fx_Alpha_Fr
+Fx_Mesh/Fx_Cut_Bd
+Fx_mesh/FX_Cutfor_LG
+Fx_mesh/Fx_Fr_Nlg
+Fx_mesh/Fx_Glass_Cube_H
+Fx_mesh/Fx_Lightice
+Fx_mesh/Fx_Mesh_Dissovle_Fr
+Fx_mesh/Fx_Mesh_Fr
+Fx_mesh/Fx_Mesh_Fr_A
+Fx_mesh/Fx_mesh_SLG
+Fx_mesh/Fx_Noise_Fr
+Fx_mesh/Fx_Refraction_A
+Fx_mesh/Fx_ReplaceDiffuse
+Fx_mesh/Fx_ReplaceDiffuse_L
+Fx_mesh/Fx_ReplaceDiffuse_Stencil
+Fx_mesh/Fx_ReplaceDiffuseMove
+Fx_mesh/Fx_S_Disslove
+Fx_mesh/Hero_ReplaceTex_H
+Fx_Mesh/Mesh_Cut_LG
+Fx_Mesh/Mesh_Cut_LG(Liangbian)
+Fx_mesh/Scenes_L4
+Fx_mesh/Scenes_Tex_A
+FXInbattle_S1S3/Additive_ML_Lod
+FXInbattle_S1S3/Blended_ML_Lod
+FXInbattle_S1S3/ParticleFx_Pa_Add_ND_Lod
+FXInbattle_S1S3/ParticleFx_Pa_Add_ND_Mask_Lod
+FXInbattle_S1S3/ParticleFx_Pa_Add_ND_UV2_Lod
+FXInbattle_S1S3/ParticleFx_Pa_Blend_ND_Lod
+FXInbattle_S1S3/ParticleFx_Pa_Blend_ND_Mask_Lod
+FXInbattle_S1S3/TrailUV_Lod
+Hero/Hero_OutlineSolid
+Hero/Meta_juese_Cartoon
+Hero/Meta_juese_Cartoon_Alpha
+Hero/Meta_juese_CartoonFace
+Hero/Meta_juese_CartoonFace_2U
+Hidden/Common/Outline
+Hidden/Common/OutlineOffset
+Hidden/Common/Shadow
+Hidden/DeviceScore/GpuStress
+Hidden/FightReflMirrReplace
+Hidden/HairShadowDepth
+Hidden/Hero/Hero_Post_Outline_Blur
+Hidden/Hero/Hero_Post_Outline_Composer
+Hidden/Hero/Hero_Post_Outline_Composer
+Hidden/Hero/Hero_Post_Outline_Depth
+Hidden/Hero/Hero_Post_Outline_Occlusion
+Hidden/HeroOutline/Hero_Post_Outline_Depth
+Hidden/HeroOutline/Hero_Post_Outline_Occlusion
+Hidden/KawaseBlur
+Hidden/MLPE/MLPEBcs
+Hidden/MLPE/MLPEBcsDefault
+Hidden/MLPE/MLPEBloom
+Hidden/MLPE/MLPEBloomDefault
+Hidden/MLPE/MLPEBlur
+Hidden/MLPE/MLPEBlurDefault
+Hidden/MLPE/MLPEHVBlur
+Hidden/MLPE/UIBlurDualFilter
+Hidden/MoShi_NHero_L1_T2Base
+Hidden/MTRenderPipeline/DepthMeshReprojection
+Hidden/NGUI/MergeAlpha
+Hidden/PostProcessing/Bloom
+Hidden/PostProcessing/PPBlitCopy
+Hidden/PostProcessing/UberShader
+Hidden/Prometheus/BattleHero/BattleHeroBase_CubeOffset
+Hidden/Prometheus/BattleHero/BattleHeroBase_Starry
+Hidden/Prometheus/BattleSummon/SummonBase
+Hidden/Prometheus/BattleSummon/SummonBase_Alpha
+Hidden/SPD/SPD_Monster_Base
+Hidden/SPD/SPD_Monster_ChineseStyle_Base
+Hidden/Unlit/Premultiplied Colored (TextureClip)
+Hidden/Unlit/Premultiplied Colored 1
+Hidden/Unlit/Premultiplied Colored 2
+Hidden/Unlit/Premultiplied Colored 3
+Hidden/Unlit/Stencil/Transparent Colored 0_Stencil
+Hidden/Unlit/Stencil/Transparent Colored 1_Stencil
+Hidden/Unlit/Text (TextureClip)
+Hidden/Unlit/Text 1
+Hidden/Unlit/Text 2
+Hidden/Unlit/Text 3
+Hidden/Unlit/TextNew (TextureClip)
+Hidden/Unlit/TextNew 1
+Hidden/Unlit/TextNew 2
+Hidden/Unlit/TextNew 3
+Hidden/Unlit/Transparent Colored (TextureClip)
+Hidden/Unlit/Transparent Colored 1
+Hidden/Unlit/Transparent Colored 2
+Hidden/Unlit/Transparent Colored 3
+Hidden/Unlit/Transparent Colored Change 1
+HIDDEN/Unlit/Transparent ColoredAChann 1
+Hidden/Unlit/Transparent Masked 1
+Hidden/Unlit/Transparent Masked 2
+Hidden/Unlit/Transparent Masked 3
+Hidden/Unlit/Transparent NoColored 1
+Hidden/Unlit/Transparent Packed 1
+Hidden/Unlit/Transparent Packed 2
+Hidden/Unlit/Transparent Packed 3
+HighMesh/Fx_2U_LG
+HighMesh/Fx_Hero_Slg
+HOG/FOWRender
+Huiji/huiji_FX_BG
+Huiji/Huiji_Orb
+Huiji/Huiji_Weapon
+Huiji/Huiji_Weapon_LG
+ImageEffects/Dying
+ImageEffects/FogofWar
+ImageEffects/FogofWarSelfDepth
+IndicatorStretch/SignCircle01
+IndicatorStretch/SignCircle02
+IndicatorStretch/SignCircle03
+IndicatorStretch/SignCircle04
+IndicatorStretch/SignCircle_New
+IndicatorStretch/UI_A_RGB_M
+Legacy Shaders/Self-Illumin/VertexLit
+Line/Additive(Soft)
+ljy/Mirror/MirrorParam
+ljy/Mirror/MirrorRefrection
+ljy/Shadow
+LM/Flicker
+LM/Flicker_Alpha
+MapBuilder/3DModel
+Mesh/Cut_LG
+Mesh/Mc_Cut_LG
+Mesh/Uv_Cut_LG
+MirrorZWriteOff
+Ml_H_FX/FX_Diff_NL_A
+Ml_H_FX/FX_Diff_NL_B
+ML_Hero/Habo
+MLBBBuiltin/Legacy Shaders/Diffuse
+MLBBBuiltin/Legacy Shaders/Lightmapped/VertexLit
+MLBBBuiltin/Legacy Shaders/Particles/Additive
+MLBBBuiltin/Legacy Shaders/Particles/Additive (Soft)
+MLBBBuiltin/Legacy Shaders/Particles/Alpha Blended
+MLBBBuiltin/Legacy Shaders/Particles/Alpha Blended Premultiply
+MLBBBuiltin/Legacy Shaders/Self-Illumin/Diffuse
+MLBBBuiltin/Legacy Shaders/Transparent/Diffuse
+MLBBBuiltin/Legacy Shaders/Transparent/VertexLit
+MLBBBuiltin/Legacy Shaders/VertexLit
+MLBBBuiltin/Mobile/Diffuse
+MLBBBuiltin/Mobile/Particles/Additive
+MLBBBuiltin/Particles/Standard Unlit
+MLBBBuiltin/Sprites/Default
+MLBBBuiltin/Sprites/Mask
+MLBBBuiltin/UI/Default
+MLBBBuiltin/UI/Default Font
+MLBBBuiltin/UI/Unlit/Text
+MLBBBuiltin/Unlit/Texture
+MLBBBuiltin/Unlit/Transparent Cutout
+Mlhero/FX_CF2U_LG_InBattle
+Mlhero/FX_Diffuse2u_LG_InBattle
+MlHero/Hero_Pbr_Low_InBattle
+MlHero/Hero_Pbr_Low_InBattleBase
+MlHero/Meta_juese_Ghost
+MlHero/ML_FightCartoon
+MlHero/ML_FightCartoon_HardEdge
+MlHero/ML_FightCartoon_OutFire
+MlHero/ML_FightCartoon_OutFire_Naruto
+MlHero/ML_FightCartoon_OutFire_Noshadow
+MlHero/ML_FightCartoonBase
+MlHero/ML_FightCartoonBase_HardEdge
+MlHero/ML_FightCartoonBase_Naruto_Stencil
+MlHero/ML_FightCartoonBase_Stencil
+MlHero/ML_FightCartoonBaseNew
+MlHero/ML_FightCartoonBaseNew_2U
+MlHero/ML_FightCartoonBaseZoneShadow
+MlHero/ML_FightCartoonBaseZoneShadow_Dissovle_Alpha
+MlHero/ML_FightCartoonBaseZoneShadow_Dissovle_Alpha_Arlott
+MlHero/ML_FightCartoonNew
+MlHero/ML_FightCartoonNew_2U
+MlHero/ML_FightCartoonOutFire
+MlHero/ML_FightCartoonOutFire_Naruto
+MlHero/ML_FightCartoonOutline
+MlHero/ML_FightCartoonZoneShadow
+MlHero/ML_FightCartoonZoneShadow_Dissovle_Alpha
+MlHero/ML_FightCartoonZoneShadow_Dissovle_Alpha_Arlott
+MlHero/ML_FightCartoonZoneShadow_Dissovle_Alpha_NoOutline
+MlHero/ML_FightCartoonZoneShadow_NoOutLine
+MlHero/ML_FightOutline
+MlHero/ML_FightOutline_Decal
+MlHero/ML_FightOutlineGrad
+MlHero/ML_FightOutlineMical
+MlHero/ML_FightOutlineMical_NotNormal
+MlHero/ML_FightOutlineMicalBase
+MlHero/ML_FightSuperArmor
+MlHero/ML_FightSuperArmorLow
+MlHero/ML_FightTranslucent
+MlHero/ML_Hero_Hair
+MlHero/ML_Hero_Hair_Alpha
+MlHero/ML_Hero_Hide
+MlHero/ML_InBattle_Diffuse_ALT_Low
+MlHero/ML_InBattle_Diffuse_Low
+MlHero/ML_InBattle_Diffuse_TexRemap_Low
+MlHero/ML_InBattle_Diffuse_Translucent_Low
+MlHero/ML_InBattle_Low
+MlHero/ML_LowBudgetParallax
+MlHero/ML_meta_town_nl
+MlHero/ML_meta_town_nl_Dissolve
+MlHero/ML_NHero_Cube
+MlHero/ML_NHero_Fx
+MlHero/Ml_NHero_H_T
+MlHero/ML_NHero_L1_T2
+MlHero/ML_NHero_L1_T2_2U
+MlHero/ML_NHero_L1_T2_ALT
+MlHero/ML_NHero_L1_T2_ALT_Custom_Shadow
+MlHero/ML_NHero_L1_T2_ALTBase
+MlHero/ML_NHero_L1_T2_Decal
+MlHero/ML_NHero_L1_T2_Glaze_InBattle
+MlHero/ML_NHero_L1_T2_Glaze_InBattleBase
+MlHero/ML_NHero_L1_T2_Invisible
+MlHero/ML_NHero_L1_T2_Invisible_Low
+MlHero/ML_NHero_L1_T2_Laser
+MlHero/ML_NHero_L1_T2_LaserBase
+MlHero/ML_NHero_L1_T2_Low
+MlHero/ML_NHero_L1_T2_Low_Shadow
+MlHero/ML_NHero_L1_T2_Low_Shadow2
+MlHero/ML_NHero_L1_T2_Low_Shadow_Monster
+MlHero/ML_NHero_L1_T2_MatCap
+MlHero/ML_NHero_L1_T2_MatCapBase
+MlHero/ML_NHero_L1_T2_PM
+MlHero/ML_NHero_L1_T2_Silk_InBattle
+MlHero/ML_NHero_L1_T2_Silk_InBattleBase
+MlHero/ML_NHero_L1_T2_Sweet
+MlHero/ML_NHero_L1_T2_SweetBase
+MlHero/ML_NHero_L1_T2_Translucent
+MlHero/ML_NHero_L1_T2Base
+MlHero/ML_NHero_L1_T2Base_2U
+MlHero/ML_NHero_L1_T2Base_Decal
+MlHero/ML_NHero_L1_T2Base_Translucent
+MlHero/ML_NMonster_L1_T2
+MlHero/ML_NPet_L1_T2
+MlHero/ML_ShowMat
+MlHero/ML_ShowMatColorSpec
+MlHero/ML_ShowMatColorSpec_N
+MlHero/ML_ShowMatColorSpec_New
+MlHero/ML_ShowMatColorSpec_NL
+MlHero/ML_ShowMatColorSpec_NL_sf
+MlHero/ML_ShowMatColorSpec_NLA
+MlHero/ML_ShowMatNew
+MlHero/ML_ShowMatUN
+MlHero/ML_ShowMatUN_N
+MlHero/ML_War_advert_FG
+MlHero/ML_War_juese_FG
+MlHero/ML_War_scene_FG
+MlHero/ML_War_tower_FG
+MlHero/ML_War_tower_FG_DiffuseLM
+MlHero/ML_War_tower_FG_InBattle
+MlHero/WhatIf
+MlHero_H/meta_juese_Replace
+MLPE/Distort/DistortParam
+Mobile/LmGrassWind
+Mobile/LmGrassWind_NoNormal
+Mobile/LmGrassWindTrans
+Mobile/Particles/VertexLit Blended Line
+Mobile/Particles/VertexLit Blended Line Outline
+Mobile/UIProxy/PngMask
+Mobile/UIProxy/PngMask 1
+Mobile/UIProxy/PngMaskNoColored
+Mobile/UIProxy/TransparentColored
+Mobile/UIProxy/TransparentColored 1
+Mobile/UIProxy/TransparentNoColored
+Mobile/UIProxy/TransparentNoColored 1
+Mobile/UIProxy/UIDrawMesh
+Mobile/UIProxy/UIProxy_UnlitText 1
+MobileAlphaAdd
+MobileAlphaAddCullOn
+MobileAlphaAddZTestOff
+MobileAlphaBlend
+MobileAlphaMultiply
+MoShi/MoShi_NHero_L1_T2
+MoShi/MoShi_Pbr_Show
+MoShi/MoShi_Pbr_Show_Alpha
+MoShi/MoShi_Pbr_Show_Alpha_Outline
+MoShi/MoShi_Pbr_Show_Alpha_Point
+MoShi/MoShi_Pbr_Show_Outline
+MoShi/MoShi_Pbr_Show_Point
+MoShi/MoShi_ScreenUV_Show
+MoShi/MoShi_Simple_Alpha
+MoShi/MoShi_Simple_Clip
+NewShaderEfx/FX_M_119_skill01_001
+PartyGame/BoomBall
+PartyGame/BoomBallAlpha
+PartyGame/Ground_Mask
+PartyGame/PartyGameItem
+PBR/Hero_Pbr_AL
+PBR/Hero_Pbr_AN
+PBR/Hero_Pbr_FG
+PBR/Hero_Pbr_FL
+PBR/Hero_Pbr_FN
+PBR/Hero_Pbr_Show
+PBR/Hero_Pbr_Show(ShadowMask)
+PBR/Hero_Pbr_Show_Alpha
+PBR/Hero_Pbr_Show_Dissovle
+PBR/Hero_Pbr_Show_Hair
+PBR/Hero_Pbr_Show_Hair_Alpha
+PBR/Hero_Pbr_Show_Hair_Invisible
+PBR/Hero_Pbr_Show_Invisible
+PBR/Hero_Pbr_Show_LG
+PBR/Hero_Pbr_Show_LG(UVMap)
+PBR/Hero_Pbr_Show_LG_Alpha
+PostProcessing/BlackWhiteFlash
+PostProcessing/Colour
+PostProcessing/RadialBlur
+Poxiao/Play_Fog_Mask2
+Prometheus/BattleHero/BattleHero_CubeOffset
+Prometheus/BattleHero/BattleHero_Dissolve
+Prometheus/BattleHero/BattleHero_Dissolve&Stencil&Flow
+Prometheus/BattleHero/BattleHero_Dissolve&StencilOutline
+Prometheus/BattleHero/BattleHero_Dissolve&StencilOutline&Flow
+Prometheus/BattleHero/BattleHero_Dissolve&StencilOutline&Flow&AlphaQueue
+Prometheus/BattleHero/BattleHero_Dissolve_Alpha
+Prometheus/BattleHero/BattleHero_Fresnel
+Prometheus/BattleHero/BattleHero_FresnelDissolve
+Prometheus/BattleHero/BattleHero_Laser_Alpha
+Prometheus/BattleHero/BattleHero_LGDissolve
+Prometheus/BattleHero/BattleHero_MatCap_Alpha
+Prometheus/BattleHero/BattleHero_MatCap_AlphaQueue
+Prometheus/BattleHero/BattleHero_MatcapSPSkin
+Prometheus/BattleHero/BattleHero_MatCapV2
+Prometheus/BattleHero/BattleHero_Silk
+Prometheus/BattleHero/BattleHero_Starry
+Prometheus/BattleHero/BattleHero_XavierMatcap_Alpha
+Prometheus/BattleHero/Hero
+Prometheus/BattleHero/Hero_Alpha
+Prometheus/BattleMonster/BattleMonster_NoOutline_Alpha
+Prometheus/BattleMonster/Monster_Alpha
+Prometheus/BattleSummon/Summon
+Prometheus/BattleSummon/Summon_Alpha
+Prometheus/BattleSummon/Summon_Shadow
+Prometheus/Hidden/BattleHero/BattleHero_LGDissolve
+Prometheus/Hidden/BattleHero/BattleHero_StencilOutline
+Prometheus/Hidden/BattleHero/BattleHeroBase_Dissolve
+Prometheus/Hidden/BattleHero/BattleHeroBase_Dissolve&Stencil
+Prometheus/Hidden/BattleHero/BattleHeroBase_Dissolve&Stencil&Flow
+Prometheus/Hidden/BattleHero/BattleHeroBase_Fresnel
+Prometheus/Hidden/BattleHero/BattleHeroBase_FresnelDissolve
+Prometheus/Hidden/BattleHero/BattleHeroBase_Laser
+Prometheus/Hidden/BattleHero/BattleHeroBase_MatCap
+Prometheus/Hidden/BattleHero/BattleHeroBase_MatCapSPSkin
+Prometheus/Hidden/BattleHero/BattleHeroBase_MatCapV2
+Prometheus/Hidden/BattleHero/BattleHeroBase_Silk
+Prometheus/Hidden/BattleHero/BattleHeroBase_XavierMatcap
+Prometheus/Hidden/BattleHero/HeroBase
+Prometheus/Hidden/BattleMonster/MonsterBase
+Prometheus/VFX/Base
+Prometheus/VFX/DiffuseFresnel
+Prometheus/VFX/Dissolve
+Prometheus/VFX/DissolveHigh
+Prometheus/VFX/Fresnel
+Prometheus/VFX/Gradient
+Prometheus/VFX/Mask
+Prometheus/VFX/Particle
+RainTest
+Reflection/PlanarReflection
+Scene/ClipLiuGuang
+Scene/ExtremelyHigh/Crystal
+Scene/ExtremelyHigh/Crystal_With_Edge
+Scene/ExtremelyHigh/CrystalLow
+Scene/ExtremelyHigh/CrystalOpaque
+Scene/ExtremelyHigh/Fx_water_VH2
+Scene/ExtremelyHigh/GrassMove_ExtremelyHigh_Dissolve
+Scene/ExtremelyHigh/GrassMove_High
+Scene/ExtremelyHigh/GrassMove_High_MergeAlpha
+Scene/ExtremelyHigh/PbrFloor
+Scene/ExtremelyHigh/PbrFloorAlpha
+Scene/ExtremelyHigh/PbrTower
+Scene/ExtremelyHigh/ScenePbrStruct
+Scene/ExtremelyHigh/SceneStruct
+Scene/ExtremelyHigh/Simple/Crystal_With_Cube
+Scene/ExtremelyHigh/Simple/SceneDecalGrass
+Scene/ExtremelyHigh/Simple/SceneDecalGrass_MergeAlpha
+Scene/ExtremelyHigh/Simple/SceneFloor
+Scene/ExtremelyHigh/Simple/SceneFloorAlpha
+Scene/ExtremelyHigh/TreeMove_High
+Scene/ExtremelyHigh/UnlitLitmapUnderwater
+Scene/ExtremelyHigh/UnlitUnderwater
+Scene/GrassBlend
+Scene/GrassBlend_Cut
+Scene/GrassMove
+Scene/GrassMove_High
+Scene/GrassMove_High_NoForce
+Scene/GrassMove_MergeAlpha
+Scene/Heroshow/HeroShow_GrassWave
+Scene/Heroshow/HeroShow_GrassWave_High
+Scene/Heroshow/HeroShow_UnlitTextureColor
+Scene/Heroshow/HeroShow_UnlitTextureColorAlpha
+Scene/Lighter
+Scene/LighterNotEqual
+Scene/LighterTrans
+Scene/LighterWithLightMap
+Scene/LighterWithLightMap2
+Scene/LiuGuang
+Scene/LiuGuangMult
+Scene/ML_Gress_LP
+Scene/ML_Gress_LP_MergeAlpha
+Scene/ML_War_tower_FG_Shadow
+Scene/ML_War_tower_FG_Shadow_Diffuse
+Scene/Mobile2Blend01
+Scene/Mobile2BlendNew
+Scene/Mobile3Blend
+Scene/Mobile3Blend01
+Scene/Mobile3BlendWithUV
+Scene/MobileWater
+Scene/New_Scenes_2100
+Scene/NoRender/ShadowReceiver
+Scene/Play_Fog_Mask
+Scene/S3_S1/Scene_ASobject_MBR_Glow_Low
+Scene/S3_S1/Scene_Stone&Metal&Ground_MBR_Low
+Scene/S3_S1/Scene_Stone_Metal_Ground_MBR_Low_Color
+Scene/S5_S4/Scene_ASobject_PBR_Reflection
+Scene/S5_S4/Scene_Crystal
+Scene/S5_S4/Scene_Crystal_Color
+Scene/S5_S4/Scene_Crystal_Color_Chaos
+Scene/S5_S4/Scene_Ground_MBR
+Scene/S5_S4/Scene_Ground_MBR_Color
+Scene/S5_S4/Scene_Ground_MBR_Diffuse
+Scene/S5_S4/Scene_Ground_MBR_Diffuse_VcAlpha
+Scene/S5_S4/Scene_Ground_PBR
+Scene/S5_S4/Scene_Plant_MBR
+Scene/S5_S4/Scene_Plant_MBR_MergeAlpha
+Scene/S5_S4/Scene_Plant_MBR_MergeAlpha(Instancing)
+Scene/S5_S4/Scene_Plant_MBR_MergeAlpha(OB)
+Scene/S5_S4/Scene_River_MBR
+Scene/S5_S4/Scene_Stone&Metal_DiffuseLM_Fog
+Scene/S5_S4/Scene_Stone&Metal_MBR
+Scene/S5_S4/Scene_Stone&Metal_MBR_DiffuseLM
+Scene/S5_S4/Scene_Stone&Metal_PBR
+Scene/S5_S4/Scene_Stone_Metal_MBR_Color
+Scene/S5_S4/Scene_Stone_Metal_MBR_Color_DiffuseLM
+Scene/S5_S4/Scene_Stone_Metal_MBR_Color_NoEmission
+Scene/S5_S4/Scene_Stone_Metal_PBR_Color
+Scene/S5_S4/Scene_Tower_MBR
+Scene/S5_S4/Scene_Tower_MBR_DiffuseLM
+Scene/S5_S4/Scene_Tower_MBR_DiffuseMaskLM
+Scene/S5_S4/Scene_Tower_MBR_DiffuseMaskLM_LG
+Scene/S5_S4/Scene_Tower_MBR_DiffuseMaskLMDissovle
+Scene/S5_S4/Scene_Tower_MBR_Glow_High
+Scene/S5_S4/Scene_Tower_PBR
+Scene/Scene_AO_UV
+Scene/SceneMoveShadow
+Scene/Self-Illumin/Diffuse
+Scene/TexShrink
+Scene/TexShrinkAB
+Scene/VegetationShake
+Scene/Water (simple)
+Scenes/CloudShader
+Scenes/Meta_Cube_NL
+Scenes_H/Scenes_Diff_Cutoff
+Scenes_H/UI_Tiling_Cut
+Shader Forge/FX_Add_Cutoff
+Shader Forge/FX_Add_Lg
+Shader Forge/FX_Add_Z
+Shader Forge/FX_Blend_Cutoff
+Shader Forge/FX_BookCard
+Shader Forge/FX_Diff_Cutoff
+Shader Forge/FX_DissolveNoiseFlu
+Shader Forge/FX_Fr_Lg
+Shader Forge/FX_Fr_Lg_A
+Shader Forge/FX_Fr_Lg_A_InBattle
+Shader Forge/FX_Glass
+Shader Forge/Fx_Glass_Cube
+Shader Forge/Fx_Glass_Fr
+Shader Forge/FX_Hero_Glass
+Shader Forge/FX_LG_Mask_AD
+Shader Forge/FX_LG_Mask_BL
+Shader Forge/FX_Liuti
+Shader Forge/FX_Micai
+Shader Forge/Fx_ninja_InBattle
+Shader Forge/FX_Niuqu
+Shader Forge/Fx_Nrd
+Shader Forge/Fx_Nrd_A
+Shader Forge/Fx_Nrd_A_InBattle
+Shader Forge/Fx_One_LG
+Shader Forge/FX_Time_Alpha
+Shader Forge/FX_UvMask
+Shader Forge/Fx_water
+Shader Forge/Fx_water_h
+Shader Forge/Fx_water_InBattle
+Shader Forge/Fx_water_VX
+Shader Forge/FX_XuLieAdd
+Shader Forge/FX_XuLieBld
+Shader Forge/FX_Yinshen_Blend
+Shader Forge/FX_Yinshen_Blend_InBattle
+Shader Forge/FX_YSW_Blend
+Shader Forge/FX_YSW_Blend_InBattle
+Shader Forge/FX_Zheshe_Diff
+Shader Forge/FxwaterVX
+Shader Forge/js_futouguang_InBattle
+Shader Forge/meta_Cartoon
+Shader Forge/Meta_CJ_Ta
+Shader Forge/meta_Cloth
+Shader Forge/Meta_Em_Fr
+Shader Forge/meta_juese
+Shader Forge/Meta_juese_AL
+Shader Forge/meta_juese_EL
+Shader Forge/meta_juese_Em
+Shader Forge/Meta_juese_Fcutoff
+Shader Forge/meta_juese_FG
+Shader Forge/Meta_juese_FG_Decal
+Shader Forge/meta_juese_FL
+Shader Forge/meta_juese_FL_Alpha
+Shader Forge/Meta_juese_FL_Dissovle
+Shader Forge/meta_juese_Lg
+Shader Forge/meta_juese_NG
+Shader Forge/meta_juese_NG_Decals
+Shader Forge/meta_juese_NG_Gles2_3
+Shader Forge/meta_juese_NM
+Shader Forge/meta_juese_NM_AddPointLit
+Shader Forge/meta_juese_NM_Alpha
+Shader Forge/meta_juese_NM_Cf
+Shader Forge/meta_juese_NM_Decal
+Shader Forge/Meta_juese_NM_Dissovle
+Shader Forge/meta_juese_NM_FL
+Shader Forge/meta_juese_NM_Iron
+Shader Forge/meta_juese_NM_Lasher
+Shader Forge/meta_juese_NM_Line
+Shader Forge/Meta_juese_NM_Noise
+Shader Forge/Meta_juese_NM_Noise_Unline
+Shader Forge/meta_juese_NM_Occlusion
+Shader Forge/meta_juese_NM_Sanshe
+Shader Forge/meta_juese_NM_Shadows
+Shader Forge/meta_juese_NM_Shadows_FGTex
+Shader Forge/Meta_juese_RL
+Shader Forge/Meta_juese_SS
+Shader Forge/Meta_juese_Subtle
+Shader Forge/meta_juese_ZSHZ
+Shader Forge/meta_juese_ZSHZ2
+Shader Forge/meta_scene_FL_NoLight
+Shader Forge/Meta_Scenes_High
+Shader Forge/Meta_Zhantai_A
+Shader Forge/Meta_Zhantai_B
+Shader Forge/Meta_Zhantai_skybox
+Shader Forge/Meta_Zhantai_UV2
+Shader Forge/Meta_Zhantai_UV2_CameAlpha
+Shader Forge/Meta_Zhantai_UV3
+Shader Forge/Meta_Zhantai_UV4
+Shader Forge/Meta_Zhantai_UV4_OutLine
+Shader Forge/Meta_Zhantai_Uv_Xnormal
+Shader Forge/Temp/FX_Zheshe
+Shader Forge/UI_FX_Card_01
+Shader Forge/UI_FX_Card_02
+Shader Forge/UI_FX_shapan_cut
+Shader Forge/water
+Shader Forge/zhantai_Diffes
+SignCircle05
+SPD/SPD_Monster
+SPD/SPD_Monster_ChineseStyle
+Spine/Skeleton
+Spine/Skeleton Fill
+Spine/Skeleton Lit
+Spine/Skeleton Lit ZWrite
+Spine/Skeleton Tint
+Spine/Skeleton Tint Black
+Spine/Skeleton_Mask
+Spine/SkeletonGhost
+Spine/Special/Skeleton Grayscale
+Temp/<effect>_ML/AdditiveUV_ML_MB
+Temp/Effect/GlassWithTex_High_MB
+Temp_PBR/Hero_Pbr_Show2.0
+Temp_PBR/Hero_Pbr_Show2.0_Alpha
+Test/Text2
+Theseus/Lit/PBR(Anisotropic MultiSpecular)_Initial
+Theseus/Lit/PBR(Common)_Initial
+Theseus/Lit/PBR(Skin)_Initial
+Theseus/OTT_Effect/<effect>_AdditiveBackface
+Theseus/OTT_Effect/Particles_Alpha_Blended_Premultiply
+Theseus/Scene_Initial/Compression(Initial)
+Theseus/Scene_Initial/SimplePBR(Initial)
+Theseus/Scene_Initial/Transparent(Initial)
+Theseus/Scene_Initial/VertexMove(Initial)
+thjie/AnimFlower
+thjie/AnimGrass
+thjie/Blended_ML_Split_Alpha
+thjie/Blended_ML_Split_Alpha2
+thjie/FX_BubbleEffect
+thjie/GradentTexture
+thjie/ScreenBlur
+thjie/ScreenCartoonEffect
+thjie/ScreenDouYin
+thjie/ScreenGray
+thjie/ScreenMaskShader
+TreasureBox
+TreasureBox_InBattle
+Tutorial/Tutorial_PBR2.0
+Tutorial/Tutorial_PBR2.0_Hair
+UI//UI_Distortion
+UI/BrushMask
+UI/DigAHole
+UI/Fx_Noise
+UI/GRenderShader
+UI/GRenderShader 1
+UI/MatcapWaterHigh
+UI/NGUI_TextEff
+UI/PngMask
+UI/PngMask 1
+UI/PngMask 1NoColored
+UI/PngMask 2
+UI/PngMask 2NoColored
+UI/PngMaskNoColored
+UI/PNGMaskOneTexture
+UI/PNGMaskOneTexture 1
+UI/Radial
+UI/SaturationDissove
+UI/SonicWave
+UI/StarrySky
+UI/Stencil/PngMask_Stencil
+UI/Stencil/UiClipFx_Pa_Add_NDStencil
+UI/UI_ShapArray
+UI/UI_StarrySkyHeightGradient
+UI/UiClipBlendedUV_ML
+UI/UiClipCardTypeLegend
+UI/UiClipFx_Pa_Add_ND
+UI/UiClipFx_Pa_Blend_ND
+UI/UiClipParticleAdd
+UI/UiClipParticleAdditiveUV
+UI/UiClipParticleAdditiveUVStencil
+UI/UiClipParticleAddStencil
+UI/UiClipParticleAddUvAni
+UI/UIClipParticleFx_Pa_Add_ND
+UI/UIClipParticleFx_Pa_Blend_ND
+UI/UiClipParticleOverlay
+UI/UiClipSolid
+UI/UIDissolve_2U
+UI/UIDissolve_2U_Shape
+UI/UIMaskStencil
+UI/UiParticleProgress
+UI/UISpecial_Dissolve_2U
+UI/UISpecial_Dissovle
+UI/UISpecial_HUEColor
+UI/UISpecial_JB
+UI/UISpecial_Mask_S
+UI/UISpecial_NoiseMask
+UI/UISpecial_SGMB
+UI/UV_courdNGUI
+UI_Mesh/Glass_Ball_NL
+UI_Mesh/Glass_Hero_NL
+UniformMesh/PngMask_UM
+UniformMesh/Transparent Colored_UM
+UnityEffects/DepthMap
+Unlit/DynamicWaterRipples
+Unlit/MaskedUiTexture
+Unlit/MaskedUiTexture 1
+Unlit/MaskedUiTexture 2
+Unlit/MaskedUiTexture_MA
+Unlit/MaskTexture
+Unlit/Meta_juese_Paopao
+Unlit/MTDefault
+Unlit/Premultiplied Colored
+Unlit/ProgressAngleClip
+Unlit/ProgressClip
+Unlit/ReflectionMirror
+Unlit/Stencil/Text_Stencil
+Unlit/Stencil/Transparent Colored_Stencil
+Unlit/Text
+Unlit/TextNew
+Unlit/Texture
+Unlit/TextureColor
+Unlit/TextureColorAlpha
+Unlit/TextureNoFog
+Unlit/TextureReceiveShadow
+Unlit/Transparent Colored
+Unlit/Transparent Colored (Packed) (TextureClip)
+Unlit/Transparent Colored Additive
+Unlit/Transparent Colored BGRT
+Unlit/Transparent Colored Change
+Unlit/Transparent Colored Clear Alpha
+Unlit/Transparent Colored(AvPro)
+Unlit/Transparent ColoredAChann
+Unlit/Transparent Masked
+Unlit/Transparent Masked Alpha
+Unlit/Transparent NoColored
+Unlit/Transparent Packed
+Unlit/Transparent_Color
+Unlit/TransparentBox
+Unlit/UiFlag
+Unlit/UIMianBackGround
+Unlit/UIMianMode
+Unlit/UIMianModeone
+Unlit/UITextureMask
+Unlit/UiUvRot
+Unlit/Unlit_Color
+Unlit/Unlit_Shadow
+Unlit/UnlitShaderUV3
+Unlit/WaterReflection
+Unlit/WaterReflectionCubeMap
+Unlit/WaterReflectionCubeMap2
+VerticalBillboard
+VerticalBillboardAB
+VerticalBillboardTexture
+Zgame/Characters/NewPBR/Standard

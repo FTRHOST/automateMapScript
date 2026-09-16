@@ -7,16 +7,19 @@ Teknik: ambil ISI dari MChampion (donor), lalu patch IDENTITAS-nya
 (nama bundle, container, AssetBundle m_Name, SerializedFile name, externals)
 agar sama persis dengan 049 (target). Hasilnya game mengira ini file 049.
 
-Cara pakai:
-  python3 spoof_map.py
-  -> menghasilkan PVP_049_add_SPOOFED.unity3d
+Cara pakai (dari root repo):
+  python3 tools/spoof_map.py
+  -> menghasilkan output/bundles/PVP_049_add_SPOOFED.unity3d
   -> backup asli, lalu rename hasil menjadi PVP_049_add.unity3d di folder game
 """
 import os
+from pathlib import Path
 import UnityPy
 
-DONOR_FILE = "PVP_MChampionPBR_ob_add.unity3d"   # isi grafis yang diinginkan
-IDENTITY_FILE = "PVP_049_add.unity3d"            # identitas yang ditiru
+ROOT = Path(__file__).resolve().parent.parent
+DONOR_FILE = str(ROOT / "input" / "maps" / "PVP_MChampionPBR_ob_add.unity3d")   # isi grafis yang diinginkan
+IDENTITY_FILE = str(ROOT / "input" / "maps" / "PVP_049_add.unity3d")            # identitas yang ditiru
+OUT_DIR = ROOT / "output" / "bundles"
 OUTPUT_FILE = "PVP_049_add_SPOOFED.unity3d"
 
 OLD_SCENE = "PVP_MChampionPBR_ob_add"
@@ -111,17 +114,17 @@ for sf in bundle.files.values():
     sf.mark_changed()
 
 print("[3/5] Simpan hasil spoof...")
-os.makedirs("output", exist_ok=True)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 # env.save menulis ke output/<basename>. UnityPy memakai basename dari fname key.
 # Agar nama output pasti, kita save manual via bundle.save() lalu tulis file.
 raw = bundle.save(packer="lz4")
-out_path = os.path.join("output", OUTPUT_FILE)
+out_path = OUT_DIR / OUTPUT_FILE
 with open(out_path, "wb") as f:
     f.write(raw)
 print(f"      tersimpan: {out_path} ({len(raw)/1024/1024:.2f} MB)")
 
 print("[4/5] Verifikasi ulang hasil...")
-env2 = UnityPy.load(out_path)
+env2 = UnityPy.load(str(out_path))
 b2 = list(env2.files.values())[0]
 print(f"      bundle.name={b2.name}")
 print(f"      container={list(b2.container.keys())}")
@@ -138,8 +141,8 @@ for _, sf in b2.files.items():
         print(f"      external {sf.name}: {e.path}")
     break
 
-print("[5/5] Selesai.")
+print(f"[5/5] Selesai.")
 print(f"  Cara pakai di game:")
-print(f"   1. Backup {IDENTITY_FILE} asli")
-print(f"   2. Copy output/{OUTPUT_FILE} -> {IDENTITY_FILE} (timpa / rename)")
+print(f"   1. Backup {Path(IDENTITY_FILE).name} asli")
+print(f"   2. Copy output/bundles/{OUTPUT_FILE} -> {Path(IDENTITY_FILE).name} (timpa / rename)")
 print(f"   3. Game yang load PVP_049_add akan menampilkan map MChampionPBR")
