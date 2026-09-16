@@ -107,9 +107,11 @@ def apply_spoof(bundle, env, donor_name, identity_name):
     for sf in bundle.files.values():
         sf.mark_changed()
 
-def replace_albedo_texture(env, mat_name, img_path):
+def replace_albedo_texture(env, mat_name, img_path, used_tex_path_ids=None):
     """Mengganti/menyuntikkan albedo texture (_MainTex) khusus untuk Material tertentu tanpa merubah ML_049_ob_D."""
     from PIL import Image
+    if used_tex_path_ids is None:
+        used_tex_path_ids = set()
     
     img_file = Path(img_path).resolve()
     if not img_file.exists():
@@ -119,8 +121,9 @@ def replace_albedo_texture(env, mat_name, img_path):
     image = Image.open(img_file)
     print(f"[*] Membuka gambar custom: {img_file.name} ({image.size[0]}x{image.size[1]})")
 
+    all_objects = list(env.objects)
     modified = 0
-    for obj in env.objects:
+    for obj in all_objects:
         if obj.type.name == "Material":
             mdata = obj.read()
             if mdata.m_Name == mat_name:
@@ -137,12 +140,12 @@ def replace_albedo_texture(env, mat_name, img_path):
                     print(f"[ERR] Material '{mat_name}' tidak memiliki property _MainTex")
                     continue
 
-                # Cek apakah _MainTex menunjuk ke Texture2D khusus yang BUKAN ML_049_ob_D (PathID 478)
+                # Cek apakah _MainTex menunjuk ke Texture2D khusus milik sendiri
                 target_tex_obj = None
                 if main_tenv.m_Texture.path_id != 0 and main_tenv.m_Texture.path_id != 478:
                     try:
                         t_read = main_tenv.m_Texture.read()
-                        if t_read and t_read.m_Name != "ML_049_ob_D":
+                        if t_read and t_read.m_Name == f"{mat_name}_D":
                             target_tex_obj = t_read
                     except Exception:
                         pass
@@ -153,28 +156,30 @@ def replace_albedo_texture(env, mat_name, img_path):
                     target_tex_obj.m_Width, target_tex_obj.m_Height = image.size
                     target_tex_obj.save()
                     target_tex_obj.assets_file.mark_changed()
+                    used_tex_path_ids.add(target_tex_obj.path_id)
                     modified += 1
                     print(f"[SUCCESS] Texture2D '{target_tex_obj.m_Name}' (PathID: {target_tex_obj.path_id}) berhasil diganti dengan gambar {img_file.name}")
                 else:
                     # Jika default _MainTex adalah Null(0) atau menunjuk ke ML_049_ob_D (PathID 478),
-                    # Cari objek Texture2D lain yang bisa kita daftarkan/alokasikan khusus untuk Material ini
-                    # agar ML_049_ob_D (PathID 478) SAMA SEKALI TIDAK TERSENTUH!
+                    # Cari objek Texture2D lain yang cocok atau belum dipakai oleh material lain
                     allocated_tex_obj = None
-                    for t_obj in env.objects:
+                    
+                    # 1. Cari yang namanya persis {mat_name}_D
+                    for t_obj in all_objects:
                         if t_obj.type.name == "Texture2D" and t_obj.path_id != 478:
                             tdata = t_obj.read()
-                            # Cari tekstur yang namanya mengandung nama material ini atau yang belum terikat ke ob_01_M
                             if tdata.m_Name == f"{mat_name}_D":
                                 allocated_tex_obj = (t_obj, tdata)
                                 break
 
-                    # Jika belum ada, gunakan slot Texture2D khusus baru
+                    # 2. Jika belum ada, gunakan donor slot Texture2D ML_049_ob_* yang belum dipakai
                     if not allocated_tex_obj:
-                        for t_obj in env.objects:
-                            if t_obj.type.name == "Texture2D" and t_obj.path_id not in (478, 466, 335, 511, 939, 388):
+                        for t_obj in all_objects:
+                            if t_obj.type.name == "Texture2D" and t_obj.path_id not in used_tex_path_ids and t_obj.path_id not in (478, 466, 335, 511, 939, 388):
                                 tdata = t_obj.read()
-                                if "ML_049_ob" in tdata.m_Name and tdata.m_Name != "ML_049_ob_D":
+                                if "ML_049_ob" in tdata.m_Name:
                                     allocated_tex_obj = (t_obj, tdata)
+                                    used_tex_path_ids.add(t_obj.path_id)
                                     break
 
                     if allocated_tex_obj:
@@ -190,6 +195,7 @@ def replace_albedo_texture(env, mat_name, img_path):
                         main_tenv.m_Texture.m_PathID = t_reader_obj.path_id
                         mdata.save()
                         obj.assets_file.mark_changed()
+                        used_tex_path_ids.add(t_reader_obj.path_id)
                         modified += 1
                         print(f"[SUCCESS] Material '{mat_name}' kini menggunakan Texture2D Albedo terisolasi '{new_tex_name}' (PathID: {t_reader_obj.path_id}) dengan {img_file.name}!")
                     else:
@@ -233,8 +239,9 @@ def main():
 
     # Mode 3: Custom Albedo Texture
     if args.replace_albedo:
+        used_tex_path_ids = set()
         for mat_name, img_path in args.replace_albedo:
-            modified += replace_albedo_texture(env, mat_name, img_path)
+            modified += replace_albedo_texture(env, mat_name, img_path, used_tex_path_ids)
 
     # Mode 4: Spoof Identity (opsional)
     if args.spoof_as:
