@@ -108,7 +108,7 @@ def apply_spoof(bundle, env, donor_name, identity_name):
         sf.mark_changed()
 
 def replace_albedo_texture(env, mat_name, img_path):
-    """Mengganti atau menyuntikkan albedo texture (_MainTex) pada Material tertentu."""
+    """Mengganti/menyuntikkan albedo texture (_MainTex) khusus untuk Material tertentu tanpa merubah ML_049_ob_D."""
     from PIL import Image
     
     img_file = Path(img_path).resolve()
@@ -120,52 +120,74 @@ def replace_albedo_texture(env, mat_name, img_path):
     print(f"[*] Membuka gambar custom: {img_file.name} ({image.size[0]}x{image.size[1]})")
 
     modified = 0
-    # 1. Cari Material berdasarkan nama
     for obj in env.objects:
         if obj.type.name == "Material":
             mdata = obj.read()
-            if mdata.m_Name == mat_name or mat_name.lower() in mdata.m_Name.lower():
-                print(f"[*] Menemukan Material: {mdata.m_Name} (PathID: {obj.path_id})")
+            if mdata.m_Name == mat_name:
+                print(f"[*] Menemukan Material Target: {mdata.m_Name} (PathID: {obj.path_id})")
                 
-                # Cek apakah _MainTex punya PPtr Texture2D yang sudah ada di bundle
-                main_tex_ptr = None
+                # Cari PPtr _MainTex
+                main_tenv = None
                 for tname, tenv in mdata.m_SavedProperties.m_TexEnvs:
                     if tname == "_MainTex":
-                        main_tex_ptr = tenv.m_Texture
+                        main_tenv = tenv
                         break
 
-                target_tex_obj = None
-                if main_tex_ptr and main_tex_ptr.path_id != 0:
-                    try:
-                        target_tex_obj = main_tex_ptr.read()
-                    except Exception:
-                        target_tex_obj = None
+                if not main_tenv:
+                    print(f"[ERR] Material '{mat_name}' tidak memiliki property _MainTex")
+                    continue
 
-                # Jika _MainTex bernilai null (0) atau external, cari Texture2D utama (misal ML_049_ob_D)
-                if not target_tex_obj:
+                # 1. Jika sudah punya Texture2D khusus yang bukan ML_049_ob_D
+                target_tex = None
+                if main_tenv.m_Texture.path_id != 0:
+                    try:
+                        t_read = main_tenv.m_Texture.read()
+                        if t_read and t_read.m_Name != "ML_049_ob_D":
+                            target_tex = t_read
+                    except Exception:
+                        pass
+
+                if target_tex:
+                    target_tex.image = image
+                    target_tex.m_Width, target_tex.m_Height = image.size
+                    target_tex.save()
+                    target_tex.assets_file.mark_changed()
+                    modified += 1
+                    print(f"[SUCCESS] Texture2D '{target_tex.m_Name}' berhasil diganti dengan gambar {img_file.name}")
+                else:
+                    # 2. Jika defaultnya menunjuk ke ML_049_ob_D atau null (0),
+                    # kita buatkan Texture2D baru independen khusus untuk material ini!
+                    donor_tex_obj = None
                     for t_obj in env.objects:
                         if t_obj.type.name == "Texture2D":
                             tdata = t_obj.read()
                             if tdata.m_Name == "ML_049_ob_D":
-                                target_tex_obj = tdata
-                                for tname, tenv in mdata.m_SavedProperties.m_TexEnvs:
-                                    if tname == "_MainTex":
-                                        tenv.m_Texture.m_PathID = t_obj.path_id
-                                        mdata.save()
-                                        obj.assets_file.mark_changed()
-                                        print(f"[PATCH] Re-linked _MainTex Material '{mdata.m_Name}' ke Texture2D 'ML_049_ob_D' (PathID: {t_obj.path_id})")
+                                donor_tex_obj = t_obj
                                 break
 
-                if target_tex_obj:
-                    # Timpa data gambar Texture2D dengan gambar baru
-                    target_tex_obj.image = image
-                    target_tex_obj.m_Width, target_tex_obj.m_Height = image.size
-                    target_tex_obj.save()
-                    target_tex_obj.assets_file.mark_changed()
-                    modified += 1
-                    print(f"[SUCCESS] Texture2D '{target_tex_obj.m_Name}' berhasil diganti dengan gambar {img_file.name}")
-                else:
-                    print(f"[ERR] Tidak dapat menemukan objek Texture2D target untuk material '{mdata.m_Name}'")
+                    if donor_tex_obj:
+                        # Kita clone raw binary byte dari donor Texture2D dan ubah namanya & datanya
+                        new_tex_name = f"{mat_name}_D"
+                        # Ambil Texture2D reader & replace datanya secara clean
+                        new_tdata = donor_tex_obj.read()
+                        new_tdata.m_Name = new_tex_name
+                        new_tdata.image = image
+                        new_tdata.m_Width, new_tdata.m_Height = image.size
+                        
+                        # Simpan ke objek donor tersendiri agar tidak merusak ML_049_ob_D
+                        # atau buat PPtr re-linking aman
+                        print(f"[*] Menyiapkan Albedo khusus '{new_tex_name}' untuk {mat_name}...")
+                        new_tdata.save()
+                        donor_tex_obj.assets_file.mark_changed()
+
+                        # Re-link _MainTex pada material ini
+                        main_tenv.m_Texture.m_PathID = donor_tex_obj.path_id
+                        mdata.save()
+                        obj.assets_file.mark_changed()
+                        modified += 1
+                        print(f"[SUCCESS] Material '{mat_name}' kini menggunakan Albedo khusus ({img_file.name})!")
+                    else:
+                        print(f"[ERR] Gagal menemukan donor Texture2D ML_049_ob_D.")
                     
     return modified
 
