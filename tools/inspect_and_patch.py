@@ -107,12 +107,75 @@ def apply_spoof(bundle, env, donor_name, identity_name):
     for sf in bundle.files.values():
         sf.mark_changed()
 
+def replace_albedo_texture(env, mat_name, img_path):
+    """Mengganti atau menyuntikkan albedo texture (_MainTex) pada Material tertentu."""
+    from PIL import Image
+    
+    img_file = Path(img_path).resolve()
+    if not img_file.exists():
+        print(f"[ERR] File gambar {img_file} tidak ditemukan!")
+        return 0
+
+    image = Image.open(img_file)
+    print(f"[*] Membuka gambar custom: {img_file.name} ({image.size[0]}x{image.size[1]})")
+
+    modified = 0
+    # 1. Cari Material berdasarkan nama
+    for obj in env.objects:
+        if obj.type.name == "Material":
+            mdata = obj.read()
+            if mdata.m_Name == mat_name or mat_name.lower() in mdata.m_Name.lower():
+                print(f"[*] Menemukan Material: {mdata.m_Name} (PathID: {obj.path_id})")
+                
+                # Cek apakah _MainTex punya PPtr Texture2D yang sudah ada di bundle
+                main_tex_ptr = None
+                for tname, tenv in mdata.m_SavedProperties.m_TexEnvs:
+                    if tname == "_MainTex":
+                        main_tex_ptr = tenv.m_Texture
+                        break
+
+                target_tex_obj = None
+                if main_tex_ptr and main_tex_ptr.path_id != 0:
+                    try:
+                        target_tex_obj = main_tex_ptr.read()
+                    except Exception:
+                        target_tex_obj = None
+
+                # Jika _MainTex bernilai null (0) atau external, cari Texture2D utama (misal ML_049_ob_D)
+                if not target_tex_obj:
+                    for t_obj in env.objects:
+                        if t_obj.type.name == "Texture2D":
+                            tdata = t_obj.read()
+                            if tdata.m_Name == "ML_049_ob_D":
+                                target_tex_obj = tdata
+                                for tname, tenv in mdata.m_SavedProperties.m_TexEnvs:
+                                    if tname == "_MainTex":
+                                        tenv.m_Texture.m_PathID = t_obj.path_id
+                                        mdata.save()
+                                        obj.assets_file.mark_changed()
+                                        print(f"[PATCH] Re-linked _MainTex Material '{mdata.m_Name}' ke Texture2D 'ML_049_ob_D' (PathID: {t_obj.path_id})")
+                                break
+
+                if target_tex_obj:
+                    # Timpa data gambar Texture2D dengan gambar baru
+                    target_tex_obj.image = image
+                    target_tex_obj.m_Width, target_tex_obj.m_Height = image.size
+                    target_tex_obj.save()
+                    target_tex_obj.assets_file.mark_changed()
+                    modified += 1
+                    print(f"[SUCCESS] Texture2D '{target_tex_obj.m_Name}' berhasil diganti dengan gambar {img_file.name}")
+                else:
+                    print(f"[ERR] Tidak dapat menemukan objek Texture2D target untuk material '{mdata.m_Name}'")
+                    
+    return modified
+
 def main():
     parser = argparse.ArgumentParser(description="Unity AssetBundle Inspector & Patching Tool")
     parser.add_argument("--input", required=True, help="Path ke file AssetBundle (.unity3d)")
     parser.add_argument("--list", action="store_true", help="Tampilkan semua GameObject di bundle")
     parser.add_argument("--search", help="Cari GameObject berdasarkan nama")
     parser.add_argument("--set-active", nargs=2, metavar=('NAME', 'STATUS'), help="Set m_IsActive GameObject (contoh: MPL_ID True)")
+    parser.add_argument("--replace-albedo", nargs=2, action="append", metavar=('MATERIAL', 'IMAGE'), help="Ganti texture Albedo (_MainTex) Material (contoh: --replace-albedo ML_049_ob_G4_1 MPL_ID_G4_1_1.png)")
     parser.add_argument("--spoof-as", help="Path ke target identity file (contoh: input/maps/PVP_049_add.unity3d)")
     parser.add_argument("--output", help="Path output file .unity3d hasil editan")
 
@@ -138,9 +201,14 @@ def main():
     if args.set_active:
         target_name, status_str = args.set_active
         is_active = status_str.lower() in ("true", "1", "yes")
-        modified = set_gameobject_active(env, target_name, is_active)
+        modified += set_gameobject_active(env, target_name, is_active)
 
-    # Mode 3: Spoof Identity (opsional)
+    # Mode 3: Custom Albedo Texture
+    if args.replace_albedo:
+        for mat_name, img_path in args.replace_albedo:
+            modified += replace_albedo_texture(env, mat_name, img_path)
+
+    # Mode 4: Spoof Identity (opsional)
     if args.spoof_as:
         identity_path = Path(args.spoof_as)
         donor_name = Path(input_path).stem
