@@ -107,12 +107,61 @@ def apply_spoof(bundle, env, donor_name, identity_name):
     for sf in bundle.files.values():
         sf.mark_changed()
 
+def _clone_texture2d(template_reader, new_name, image):
+    """Clone ObjectReader Texture2D menjadi objek baru dengan PathID unik dalam file yang sama.
+
+    Meniru template (import settings/format) tanpa merusak texture asli.
+    Return: (new_reader, new_data)
+    """
+    import copy
+
+    assets_file = template_reader.assets_file
+    new_path_id = max(assets_file.objects.keys()) + 1
+    new_reader = copy.copy(template_reader)
+    new_reader.path_id = new_path_id
+    new_reader.assets_file = assets_file
+    new_reader.data = None
+    if hasattr(new_reader, "_read_until"):
+        try:
+            new_reader._read_until = None
+        except Exception:
+            pass
+    assets_file.objects[new_path_id] = new_reader
+
+    new_data = new_reader.read()
+    new_data.m_Name = new_name
+    new_data.image = image
+    try:
+        new_data.m_Width, new_data.m_Height = image.size
+    except Exception:
+        pass
+    new_data.save()
+    assets_file.mark_changed()
+    return new_reader, new_data
+
+
+def _find_texture_template(assets_file, prefer_path_id=478):
+    """Cari template Texture2D terbaik untuk di-clone (default ML_049_ob_D)."""
+    if prefer_path_id in assets_file.objects:
+        cand = assets_file.objects[prefer_path_id]
+        if cand.type.name == "Texture2D":
+            return cand
+    for o in assets_file.objects.values():
+        if o.type.name == "Texture2D":
+            return o
+    return None
+
+
 def replace_albedo_texture(env, mat_name, img_path, used_tex_path_ids=None):
-    """Mengganti/menyuntikkan albedo texture (_MainTex) khusus untuk Material tertentu tanpa merubah ML_049_ob_D."""
+    """Mengganti/menyuntikkan albedo texture (_MainTex) khusus untuk Material tertentu.
+
+    Setiap material mendapat Texture2D BARU hasil clone (tidak mencuri Normal/PBR),
+    sehingga bisa patch 40+ material tanpa kehabisan slot.
+    """
     from PIL import Image
     if used_tex_path_ids is None:
         used_tex_path_ids = set()
-    
+
     img_file = Path(img_path).resolve()
     if not img_file.exists():
         print(f"[ERR] File gambar {img_file} tidak ditemukan!")
@@ -128,7 +177,7 @@ def replace_albedo_texture(env, mat_name, img_path, used_tex_path_ids=None):
             mdata = obj.read()
             if mdata.m_Name == mat_name:
                 print(f"[*] Menemukan Material Target: {mdata.m_Name} (PathID: {obj.path_id})")
-                
+
                 # Cari PPtr _MainTex
                 main_tenv = None
                 for tname, tenv in mdata.m_SavedProperties.m_TexEnvs:
@@ -140,67 +189,78 @@ def replace_albedo_texture(env, mat_name, img_path, used_tex_path_ids=None):
                     print(f"[ERR] Material '{mat_name}' tidak memiliki property _MainTex")
                     continue
 
-                # Cek apakah _MainTex menunjuk ke Texture2D khusus milik sendiri
-                target_tex_obj = None
-                if main_tenv.m_Texture.path_id != 0 and main_tenv.m_Texture.path_id != 478:
-                    try:
-                        t_read = main_tenv.m_Texture.read()
-                        if t_read and t_read.m_Name == f"{mat_name}_D":
-                            target_tex_obj = t_read
-                    except Exception:
-                        pass
+                new_tex_name = f"{mat_name}_D"
 
-                if target_tex_obj:
-                    # Jika material memiliki Texture2D khusus tersendiri
-                    target_tex_obj.image = image
-                    target_tex_obj.m_Width, target_tex_obj.m_Height = image.size
-                    target_tex_obj.save()
-                    target_tex_obj.assets_file.mark_changed()
-                    used_tex_path_ids.add(target_tex_obj.path_id)
+                # 1. Idempoten: kalau _MainTex sudah menunjuk ke {mat_name}_D milik sendiri, tinggal timpa image
+                try:
+                    if main_tenv.m_Texture.path_id != 0:
+                        pointed = main_tenv.m_Texture.read()
+                        if pointed is not None and getattr(pointed, "m_Name", "") == new_tex_name:
+                            pointed_reader = getattr(pointed, "object_reader", None)
+                            if pointed_reader is None:
+                                # fallback: cari reader via path_id di file yang sama
+                                pointed_reader = obj.assets_file.objects.get(main_tenv.m_Texture.path_id)
+                            pointed.image = image
+                            pointed.m_Width, pointed.m_Height = image.size
+                            pointed.save()
+                            if pointed_reader is not None:
+                                pointed_reader.assets_file.mark_changed()
+                                used_tex_path_ids.add(pointed_reader.path_id)
+                                print(f"[SUCCESS] Texture2D '{new_tex_name}' (PathID: {pointed_reader.path_id}) berhasil diganti dengan gambar {img_file.name}")
+                            else:
+                                obj.assets_file.mark_changed()
+                                print(f"[SUCCESS] Texture2D '{new_tex_name}' berhasil diganti dengan gambar {img_file.name}")
+                            modified += 1
+                            continue
+                except Exception:
+                    pass
+
+                # 2. Kalau ada Texture2D orphan bernama {mat_name}_D (dari run sebelumnya), pakai ulang
+                reused = False
+                for t_obj in all_objects:
+                    if t_obj.type.name == "Texture2D":
+                        try:
+                            if t_obj.assets_file is not obj.assets_file:
+                                continue
+                            tdata_probe = t_obj.read()
+                        except Exception:
+                            continue
+                        if getattr(tdata_probe, "m_Name", "") == new_tex_name:
+                            tdata_probe.image = image
+                            tdata_probe.m_Width, tdata_probe.m_Height = image.size
+                            tdata_probe.save()
+                            t_obj.assets_file.mark_changed()
+                            main_tenv.m_Texture.m_PathID = t_obj.path_id
+                            main_tenv.m_Texture.m_FileID = 0
+                            mdata.save()
+                            obj.assets_file.mark_changed()
+                            used_tex_path_ids.add(t_obj.path_id)
+                            modified += 1
+                            print(f"[SUCCESS] Material '{mat_name}' memakai ulang Texture2D '{new_tex_name}' (PathID: {t_obj.path_id}) dengan {img_file.name}!")
+                            reused = True
+                            break
+                if reused:
+                    continue
+
+                # 3. Jalur utama: CLONE Texture2D baru, tidak mencuri slot Normal/PBR
+                try:
+                    template = _find_texture_template(obj.assets_file, prefer_path_id=478)
+                    if template is None:
+                        print(f"[ERR] Tidak ada template Texture2D di file material {mat_name}.")
+                        continue
+                    new_reader, _ = _clone_texture2d(template, new_tex_name, image)
+                    # refresh daftar objek agar max(path_id) berikutnya benar
+                    all_objects.append(new_reader)
+                    main_tenv.m_Texture.m_PathID = new_reader.path_id
+                    main_tenv.m_Texture.m_FileID = 0
+                    mdata.save()
+                    obj.assets_file.mark_changed()
+                    used_tex_path_ids.add(new_reader.path_id)
                     modified += 1
-                    print(f"[SUCCESS] Texture2D '{target_tex_obj.m_Name}' (PathID: {target_tex_obj.path_id}) berhasil diganti dengan gambar {img_file.name}")
-                else:
-                    # Jika default _MainTex adalah Null(0) atau menunjuk ke ML_049_ob_D (PathID 478),
-                    # Cari objek Texture2D lain yang cocok atau belum dipakai oleh material lain
-                    allocated_tex_obj = None
-                    
-                    # 1. Cari yang namanya persis {mat_name}_D
-                    for t_obj in all_objects:
-                        if t_obj.type.name == "Texture2D" and t_obj.path_id != 478:
-                            tdata = t_obj.read()
-                            if tdata.m_Name == f"{mat_name}_D":
-                                allocated_tex_obj = (t_obj, tdata)
-                                break
+                    print(f"[SUCCESS] Material '{mat_name}' kini menggunakan Texture2D Albedo terisolasi '{new_tex_name}' (PathID: {new_reader.path_id}) dengan {img_file.name}!")
+                except Exception as e:
+                    print(f"[ERR] Gagal mengalokasikan Texture2D khusus untuk {mat_name}: {e}")
 
-                    # 2. Jika belum ada, gunakan donor slot Texture2D ML_049_ob_* yang belum dipakai
-                    if not allocated_tex_obj:
-                        for t_obj in all_objects:
-                            if t_obj.type.name == "Texture2D" and t_obj.path_id not in used_tex_path_ids and t_obj.path_id not in (478, 466, 335, 511, 939, 388):
-                                tdata = t_obj.read()
-                                if "ML_049_ob" in tdata.m_Name:
-                                    allocated_tex_obj = (t_obj, tdata)
-                                    used_tex_path_ids.add(t_obj.path_id)
-                                    break
-
-                    if allocated_tex_obj:
-                        t_reader_obj, tdata = allocated_tex_obj
-                        new_tex_name = f"{mat_name}_D"
-                        tdata.m_Name = new_tex_name
-                        tdata.image = image
-                        tdata.m_Width, tdata.m_Height = image.size
-                        tdata.save()
-                        t_reader_obj.assets_file.mark_changed()
-
-                        # Link-kan _MainTex material ke PathID baru ini
-                        main_tenv.m_Texture.m_PathID = t_reader_obj.path_id
-                        mdata.save()
-                        obj.assets_file.mark_changed()
-                        used_tex_path_ids.add(t_reader_obj.path_id)
-                        modified += 1
-                        print(f"[SUCCESS] Material '{mat_name}' kini menggunakan Texture2D Albedo terisolasi '{new_tex_name}' (PathID: {t_reader_obj.path_id}) dengan {img_file.name}!")
-                    else:
-                        print(f"[ERR] Gagal mengalokasikan Texture2D khusus untuk {mat_name}.")
-                    
     return modified
 
 def main():
