@@ -22,6 +22,9 @@ Cara Pakai:
 
  7. Copy lalu kasih material + albedo sendiri (jalan dalam satu command, urutan otomatis):
     python3 tools/inspect_and_patch.py --input input/maps/PVP_MChampionPBR_ob_add.unity3d --copy-object MPL_ID_G1_1 MPL_COPY 5 0 0 --copy-material MPL_COPY ML_COPY_MAT --replace-albedo ML_COPY_MAT img.png --output output/bundles/hasil.unity3d
+
+ 8. Rotasi/skala per-copy (tambahkan 3/6 angka setelah XYZ; global --copy-rotation/--copy-scale jadi default):
+    --copy-object MPL_ID_G2_7 BOARD_A -17.19 0 -15.2 -90 0 225 --copy-object KUCING CUKING 53.795 -0.99 -0.511
 """
 
 import argparse
@@ -146,13 +149,16 @@ def _fmt_tr(position=None, rotation_euler=None, scale=None):
     return " ".join(parts) if parts else "tanpa perubahan transform"
 
 
-def copy_gameobject(env, src_name, new_name, position, rotation_euler=None, scale=None):
+def copy_gameobject(env, src_name, new_name, position, rotation_euler=None, scale=None, skip_comps=None):
     """Clone GameObject beserta komponennya (Transform/MeshFilter/MeshRenderer) + atur transform.
 
     - Mesh & Material dipakai ulang (pointer sama), jadi tidak menambah ukuran texture.
     - Transform baru didaftarkan sebagai anak dari parent yang sama dengan source.
     - Anak-anak Transform source (misal border `ML_049_ob_*_M`) ikut dicopy rekursif
       dengan nama sama, posisi/rotasi/skala maupun mesh/material diwarisi.
+    - Bones SkinnedMeshRenderer di-remap ke skeleton copy agar mesh ikut pindah.
+    - `skip_comps`: nama tipe komponen yang TIDAK ikut dicopy (misal Animator agar
+      copy jadi patung statis yang selalu terlihat). Transform selalu ikut.
     - Idempoten: kalau `new_name` sudah ada, hanya transformnya yang diupdate.
     - `position` = (x, y, z) LocalPosition absolut.
     - `rotation_euler` = (rx, ry, rz) derajat Euler; `scale` = (sx, sy, sz). Keduanya opsional.
@@ -192,6 +198,7 @@ def copy_gameobject(env, src_name, new_name, position, rotation_euler=None, scal
             except Exception:
                 continue
 
+    skip = set(skip_comps or [])
     gd = src_go.read()
     comp_readers = []
     src_t = None
@@ -199,12 +206,15 @@ def copy_gameobject(env, src_name, new_name, position, rotation_euler=None, scal
         co = sf.objects.get(c.path_id)
         if co is None:
             for o in env.objects:
-                if o.path_id == c.path_id and o.type.name in ("Transform", "RectTransform", "MeshFilter", "MeshRenderer"):
+                if o.path_id == c.path_id and o.type.name in ("Transform", "RectTransform", "MeshFilter", "MeshRenderer", "SkinnedMeshRenderer", "Animator", "MonoBehaviour"):
                     co = o
                     break
         if co is None:
             print(f"[ERR] Komponen PathID {c.path_id} milik '{src_name}' tidak ditemukan, copy dibatalkan.")
             return 0
+        if co.type.name in skip and co.type.name not in ("Transform", "RectTransform", "GameObject"):
+            print(f"    [SKIP] Komponen {co.type.name} tidak ikut dicopy")
+            continue
         comp_readers.append(co)
         if co.type.name in ("Transform", "RectTransform"):
             src_t = co
@@ -234,13 +244,15 @@ def copy_gameobject(env, src_name, new_name, position, rotation_euler=None, scal
     new_go = clones[src_go.path_id]
     new_t = clones[src_t.path_id]
 
-    # Wiring GameObject: nama baru + pointer komponen baru (urutan dipertahankan)
+    # Wiring GameObject: nama baru + pointer komponen baru (urutan dipertahankan,
+    # komponen yang di-skip dibuang dari daftar).
+    # NOTE: m_Components adalah property read-only, yang disimpan adalah m_Component.
     ngd = new_go.read()
     ngd.m_Name = new_name
     ngd.m_IsActive = True
-    for pptr in ngd.m_Components:
-        if pptr.m_PathID in clones:
-            pptr.m_PathID = clones[pptr.m_PathID].path_id
+    ngd.m_Component = [p for p in ngd.m_Component if p.component.m_PathID in clones]
+    for p in ngd.m_Component:
+        p.component.m_PathID = clones[p.component.m_PathID].path_id
     ngd.save()
     _remember(new_go, ngd)
 
@@ -276,20 +288,46 @@ def copy_gameobject(env, src_name, new_name, position, rotation_euler=None, scal
             print(f"[WARN] Gagal wiring {co.type.name} {clones[co.path_id].path_id}: {e}")
     _remember(new_t, ntd)
 
-    # Rekursif: clone anak-anak (misal border ML_049_ob_*_M) di bawah Transform baru
+    # Rekursif: clone anak-anak (misal border ML_049_ob_*_M) di bawah Transform baru.
+    # tmap/skinned: untuk remap bones SkinnedMeshRenderer ke skeleton copy-an.
+    tmap = {src_t.path_id: new_t}
+    skinned = []
+    for co in comp_readers:
+        if co.type.name == "SkinnedMeshRenderer":
+            skinned.append(clones[co.path_id])
     child_count = 0
     try:
         for child_ptr in list(_read_fresh(src_t).m_Children):
-            child_count += _clone_child_subtree(env, sf, child_ptr, new_t)
+            child_count += _clone_child_subtree(env, sf, child_ptr, new_t, tmap, skinned, skip)
     except Exception as e:
         print(f"[WARN] Gagal meng-copy anak '{src_name}': {e}")
+
+    # Remap bones + root bone ke skeleton copy agar skinned mesh ikut pindah
+    remapped = 0
+    for sr in skinned:
+        try:
+            rd = _read_fresh(sr)
+            for b in list(getattr(rd, "m_Bones", None) or []):
+                if b.m_FileID == 0 and b.m_PathID in tmap:
+                    b.m_PathID = tmap[b.m_PathID].path_id
+                    remapped += 1
+            rb = getattr(rd, "m_RootBone", None)
+            if rb is not None and rb.m_FileID == 0 and rb.m_PathID in tmap:
+                rb.m_PathID = tmap[rb.m_PathID].path_id
+                remapped += 1
+            rd.save()
+            _remember(sr, rd)
+        except Exception as e:
+            print(f"[WARN] Remap bones gagal ({sr.path_id}): {e}")
+    if remapped:
+        print(f"    [BONES] {remapped} bone/root di-remap ke skeleton copy")
 
     sf.mark_changed()
     print(f"[SUCCESS] Copy '{src_name}' (PathID: {src_go.path_id}) -> '{new_name}' (PathID: {new_go.path_id}): {_fmt_tr(position, rotation_euler, scale)} (+{child_count} anak)")
     return 1
 
 
-def _clone_child_subtree(env, sf, src_child_t_ptr, new_parent_t_reader):
+def _clone_child_subtree(env, sf, src_child_t_ptr, new_parent_t_reader, tmap, skinned, skip_comps=None):
     """Clone satu anak Transform + GameObject + komponennya di bawah parent baru. Rekursif."""
     import copy
     from UnityPy.classes import PPtr
@@ -319,6 +357,7 @@ def _clone_child_subtree(env, sf, src_child_t_ptr, new_parent_t_reader):
         sf.objects[nid] = nr
         return nr
 
+    skip = set(skip_comps or [])
     cgd = _read_fresh(src_cgo)
     clones = {src_cgo.path_id: _cr(src_cgo), src_ct.path_id: _cr(src_ct)}
     for c in cgd.m_Components:
@@ -327,15 +366,21 @@ def _clone_child_subtree(env, sf, src_child_t_ptr, new_parent_t_reader):
         co = sf.objects.get(c.m_PathID)
         if co is None:
             continue
+        if co.type.name in skip and co.type.name not in ("Transform", "RectTransform", "GameObject"):
+            continue
         clones[c.m_PathID] = _cr(co)
+        if co.type.name == "SkinnedMeshRenderer":
+            skinned.append(clones[c.m_PathID])
     new_cgo = clones[src_cgo.path_id]
     new_ct = clones[src_ct.path_id]
+    tmap[src_ct.path_id] = new_ct
 
-    # Wiring GO anak (nama dipertahankan, duplikat diizinkan Unity)
+    # Wiring GO anak (nama dipertahankan, duplikat diizinkan Unity; skip dibuang
+    # via m_Component karena m_Components read-only)
     ngd = new_cgo.read()
-    for pptr in ngd.m_Components:
-        if pptr.m_PathID in clones:
-            pptr.m_PathID = clones[pptr.m_PathID].path_id
+    ngd.m_Component = [p for p in ngd.m_Component if p.component.m_PathID in clones]
+    for p in ngd.m_Component:
+        p.component.m_PathID = clones[p.component.m_PathID].path_id
     try:
         child_name = cgd.m_Name
     except Exception:
@@ -371,7 +416,7 @@ def _clone_child_subtree(env, sf, src_child_t_ptr, new_parent_t_reader):
 
     count = 1
     for grandchild in list(ctd.m_Children):
-        count += _clone_child_subtree(env, sf, grandchild, new_ct)
+        count += _clone_child_subtree(env, sf, grandchild, new_ct, tmap, skinned, skip_comps)
     return count
 
 
@@ -694,10 +739,11 @@ def main():
     parser.add_argument("--search", help="Cari GameObject berdasarkan nama")
     parser.add_argument("--set-active", nargs=2, metavar=('NAME', 'STATUS'), help="Set m_IsActive GameObject (contoh: MPL_ID True)")
     parser.add_argument("--replace-albedo", nargs=2, action="append", metavar=('MATERIAL', 'IMAGE'), help="Ganti texture Albedo (_MainTex) Material (contoh: --replace-albedo ML_049_ob_G4_1 MPL_ID_G4_1_1.png)")
-    parser.add_argument("--copy-object", nargs=5, action="append", metavar=('SRC', 'NEW', 'X', 'Y', 'Z'), help="Copy GameObject + atur LocalPosition absolut (contoh: --copy-object MPL_ID_G1_1 MPL_ID_G1_1_COPY 5 0 0)")
+    parser.add_argument("--copy-object", nargs='+', action="append", metavar='SRC_NEW_X_Y_Z_RX_RY_RZ_SX_SY_SZ', help="Copy GameObject: 5 arg (posisi) / 8 arg (+rotasi Euler) / 11 arg (+rotasi+skala). Contoh: --copy-object A B 5 0 0 0 90 0")
     parser.add_argument("--copy-rotation", nargs=3, metavar=('RX', 'RY', 'RZ'), help="Rotasi Euler derajat untuk semua --copy-object (contoh: --copy-rotation 0 90 0)")
     parser.add_argument("--copy-scale", nargs=3, metavar=('SX', 'SY', 'SZ'), help="Skala untuk semua --copy-object (contoh: --copy-scale 2 2 2)")
     parser.add_argument("--copy-material", nargs=2, action="append", metavar=('GAMEOBJECT', 'NEWMAT'), help="Clone material renderer GO agar punya material sendiri (contoh: --copy-material MPL_COPY ML_COPY_MAT)")
+    parser.add_argument("--copy-skip-comp", action="append", metavar='TYPE', help="Tipe komponen yang tidak ikut dicopy, bisa diulang (contoh: --copy-skip-comp Animator --copy-skip-comp MonoBehaviour)")
     parser.add_argument("--spoof-as", help="Path ke target identity file (contoh: input/maps/PVP_049_add.unity3d)")
     parser.add_argument("--output", help="Path output file .unity3d hasil editan")
 
@@ -726,28 +772,47 @@ def main():
         modified += set_gameobject_active(env, target_name, is_active)
 
     # Mode 3b: Copy GameObject + atur posisi/rotasi/skala (jalan dulu agar
-    # --copy-material / --replace-albedo bisa menargetkan hasil copy dalam 1 command)
+    # --copy-material / --replace-albedo bisa menargetkan hasil copy dalam 1 command).
+    # Tiap --copy-object: 5 arg (SRC NEW X Y Z), 8 arg (+RX RY RZ), 11 arg (+RX RY RZ SX SY SZ).
+    # Global --copy-rotation/--copy-scale menjadi default bila entri tidak punya sendiri.
     if args.copy_object:
-        rot = scl = None
+        rot_g = scl_g = None
         if args.copy_rotation:
             try:
-                rot = tuple(float(v) for v in args.copy_rotation)
+                rot_g = tuple(float(v) for v in args.copy_rotation)
             except ValueError:
                 print(f"[ERR] Rotasi harus angka: {args.copy_rotation}")
-                rot = None
+                rot_g = None
         if args.copy_scale:
             try:
-                scl = tuple(float(v) for v in args.copy_scale)
+                scl_g = tuple(float(v) for v in args.copy_scale)
             except ValueError:
                 print(f"[ERR] Skala harus angka: {args.copy_scale}")
-                scl = None
-        for src_name, new_name, xs, ys, zs in args.copy_object:
+                scl_g = None
+        skip = args.copy_skip_comp or None
+        for entry in args.copy_object:
             try:
-                pos = (float(xs), float(ys), float(zs))
+                if len(entry) == 5:
+                    src_name, new_name, xs, ys, zs = entry
+                    rot, scl = rot_g, scl_g
+                    pos = (float(xs), float(ys), float(zs))
+                elif len(entry) == 8:
+                    src_name, new_name, xs, ys, zs, rxs, rys, rzs = entry
+                    pos = (float(xs), float(ys), float(zs))
+                    rot = (float(rxs), float(rys), float(rzs))
+                    scl = scl_g
+                elif len(entry) == 11:
+                    src_name, new_name, xs, ys, zs, rxs, rys, rzs, sxs, sys, szs = entry
+                    pos = (float(xs), float(ys), float(zs))
+                    rot = (float(rxs), float(rys), float(rzs))
+                    scl = (float(sxs), float(sys), float(szs))
+                else:
+                    print(f"[ERR] --copy-object butuh 5/8/11 argumen, dapat {len(entry)}: {entry}")
+                    continue
             except ValueError:
-                print(f"[ERR] Posisi harus angka: {xs} {ys} {zs}")
+                print(f"[ERR] Angka tidak valid di --copy-object: {entry}")
                 continue
-            modified += copy_gameobject(env, src_name, new_name, pos, rot, scl)
+            modified += copy_gameobject(env, src_name, new_name, pos, rot, scl, skip)
 
     # Mode 3c: Clone material milik GO (agar copy-an bisa punya albedo sendiri)
     if args.copy_material:
